@@ -1,4 +1,4 @@
-"""Cassandra safety system with HMAC-signed state and CLI tools."""
+"""Cassandra safety system with HMAC-signed state, CLI tools, and voice helpers."""
 
 from __future__ import annotations
 
@@ -207,6 +207,45 @@ class CassandraCore:
             }
         )
         return summary
+
+
+# =========================
+#  VoxCass: gestione voci familiari
+# =========================
+
+
+class VoxCass:
+    def __init__(self) -> None:
+        self.user_voice_profiles: dict[str, dict[str, object]] = {}
+
+    def register_family_voice(self, user_id: str, audio_sample: object) -> None:
+        """Registra e assegna una voce familiare all'utente."""
+        cleaned_voice = self.clean_and_process(audio_sample)
+        self.user_voice_profiles[user_id] = {
+            "voice_type": "family",
+            "voice_data": cleaned_voice,
+            "biometric_signature": self.generate_signature(cleaned_voice),
+        }
+
+    def clean_and_process(self, audio: object) -> object:
+        """Pulizia e normalizzazione audio (placeholder)."""
+        # Pseudocodice: implementare noise reduction + equalizzazione
+        processed_audio = audio  # type: ignore[assignment]
+        return processed_audio
+
+    def generate_signature(self, voice: object) -> int:
+        """Crea firma biometrica acustica unica (placeholder)."""
+        # Pseudocodice: hashing vocale su base timbro e spettrogramma
+        return hash(voice)
+
+    def play_voice(self, user_id: str, message: str) -> None:
+        profile = self.user_voice_profiles.get(user_id)
+        if profile and profile.get("voice_type") == "family":
+            self.speak_with_voice(profile["voice_data"], message)
+
+    def speak_with_voice(self, voice_data: object, message: str) -> None:
+        # Invoca il sintetizzatore vocale con timbro specifico
+        logging.debug("Riproduzione messaggio con voce personalizzata: %s", message)
 
 
 # =========================
