@@ -41,4 +41,4 @@ async def chatkit_endpoint(request: Request) -> Response:
 def cassandra_status() -> dict[str, object]:
     """Expose Cassandra safety metadata."""
 
-    return cassandra_core.summarize_for_api(run_check=True)
+    return cassandra_core.summarize_for_api()
