@@ -7,6 +7,7 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, Response, StreamingResponse
 
+from .cassandra_core import CassandraCore
 from .server import StarterChatServer
 
 app = FastAPI(title="ChatKit Starter API")
@@ -20,6 +21,7 @@ app.add_middleware(
 )
 
 chatkit_server = StarterChatServer()
+cassandra_core = CassandraCore()
 
 
 @app.post("/chatkit")
@@ -33,3 +35,10 @@ async def chatkit_endpoint(request: Request) -> Response:
     if hasattr(result, "json"):
         return Response(content=result.json, media_type="application/json")
     return JSONResponse(result)
+
+
+@app.get("/cassandra/status")
+def cassandra_status() -> dict[str, object]:
+    """Expose Cassandra safety metadata."""
+
+    return cassandra_core.summarize_for_api()
